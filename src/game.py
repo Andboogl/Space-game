@@ -3,6 +3,7 @@
 
 import pygame
 from objects import Gun, Bullet, Enemy
+from score import Score
 
 
 class Game:
@@ -23,7 +24,7 @@ class Game:
         self.gun_speed = 1
 
         # Playing atributes
-        self.is_alive = True
+        self.play_mode = 'Playing'
 
         # Bullets
         self.bullets = []
@@ -38,10 +39,13 @@ class Game:
             Enemy(self.screen, 550, 660),
         ]
 
+        # Score
+        self.score = Score()
+
     def main_loop(self):
         """Game mainloop"""
         while True:
-            if self.is_alive:
+            if self.play_mode == 'Playing':
                 self.screen.fill((0, 0, 0))
                 self.gun.draw()
 
@@ -71,21 +75,23 @@ class Game:
                     for bullet in self.bullets:
                         if bullet.image.colliderect(enemy.image_rect):
                             self.enemies.remove(enemy)
+                            self.score.add_score()
                             pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
 
                     # Player kill
                     if self.gun.image_rect.colliderect(enemy.image_rect):
-                        self.is_alive = False
+                        self.play_mode = 'Game over'
+                        self.score.load_score()
 
-            else:
+            elif self.play_mode == 'Game over':
                 self.init()
-                self.is_alive = True
+                self.play_mode = 'Playing'
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit(0)
 
-                elif event.type == pygame.KEYDOWN and self.is_alive:
+                elif event.type == pygame.KEYDOWN and self.play_mode == 'Playing':
                     if event.key == pygame.K_SPACE:
                         bullet = Bullet(self.screen, self.gun)
                         self.bullets.append(bullet)
