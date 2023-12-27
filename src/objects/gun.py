@@ -19,6 +19,16 @@ class Gun:
         self.__image_rect = self.__image.get_rect()
         self.__screen_rect = self.__screen.get_rect()
 
+    @property
+    def x(self):
+        """Get gun x position"""
+        return self.__x
+
+    @property
+    def y(self):
+        """Get gun y position"""
+        return self.__y
+
     def plus_x_position(self, pos):
         """
         Add number to x position

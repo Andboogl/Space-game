@@ -2,6 +2,7 @@
 
 
 from .gun import Gun
+from .bullet import Bullet
 
 
-__all__ = ['Gun']
+__all__ = ['Gun', 'Bullet']

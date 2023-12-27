@@ -2,7 +2,7 @@
 
 
 import pygame
-from objects import Gun
+from objects import Gun, Bullet
 
 
 class Game:
@@ -17,6 +17,9 @@ class Game:
         # Player gun
         self.gun = Gun(self.screen, 500, 500)
         self.gun_speed = 1
+
+        # Bullets
+        self.bullets = []
 
     def main_loop(self):
         """Game mainloop"""
@@ -38,8 +41,16 @@ class Game:
             if keys[pygame.K_w]:
                 self.gun.minus_y_position(self.gun_speed)
 
+            for i in self.bullets:
+                i.update()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit(0)
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        bullet = Bullet(self.screen, self.gun)
+                        self.bullets.append(bullet)
 
             pygame.display.update()
