@@ -7,6 +7,7 @@ import pygame
 class Enemy:
     """Enemy"""
     def __init__(self, screen, x, y) -> None:
+        self.__enemy_speed = 2
         self.__screen = screen
         self.__x = x
         self.__y = y
@@ -21,6 +22,12 @@ class Enemy:
     def image_rect(self):
         """Get image rect"""
         return self.__image_rect
+
+    def update(self):
+        """Update enemy"""
+        self.__y += self.__enemy_speed
+        self.__image_rect = self.__image.get_rect(
+            topleft=(self.__x, self.__y))
 
     def draw(self) -> None:
         """Draw enemy"""

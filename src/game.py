@@ -5,6 +5,7 @@ import pygame
 from objects import Gun, Bullet, Enemy
 from score import Score
 from game_over import GameOverScreen
+from spawn import generate_enemies_coordinates
 
 
 class Game:
@@ -13,6 +14,7 @@ class Game:
         pygame.init()
 
         self.__screen = pygame.display.set_mode((1200, 800))
+        self.__clock = pygame.time.Clock()
         pygame.display.set_caption('Space game')
         pygame.display.set_icon(pygame.image.load('images/icon.png'))
 
@@ -22,7 +24,7 @@ class Game:
         """Init game"""
         # Player gun
         self.__gun = Gun(self.__screen, 1000, 700)
-        self.__gun_speed = 1
+        self.__gun_speed = 7
 
         # Playing atributes
         self.__play_mode = 'Playing'
@@ -31,13 +33,21 @@ class Game:
         self.__bullets = []
 
         # Enemies
+        enemies_coordinates = generate_enemies_coordinates(6)
+        print(enemies_coordinates)
         self.__enemies = [
-            Enemy(self.__screen, 50, 150),
-            Enemy(self.__screen, 150, 250),
-            Enemy(self.__screen, 250, 350),
-            Enemy(self.__screen, 350, 450),
-            Enemy(self.__screen, 450, 550),
-            Enemy(self.__screen, 550, 660),
+            Enemy(self.__screen,
+                  enemies_coordinates[0][0], enemies_coordinates[0][1]),
+            Enemy(self.__screen,
+                enemies_coordinates[1][0], enemies_coordinates[1][1]),
+            Enemy(self.__screen,
+                enemies_coordinates[2][0], enemies_coordinates[2][1]),
+            Enemy(self.__screen,
+                enemies_coordinates[3][0], enemies_coordinates[3][1]),
+            Enemy(self.__screen,
+                enemies_coordinates[4][0], enemies_coordinates[4][1]),
+            Enemy(self.__screen,
+                enemies_coordinates[5][0], enemies_coordinates[5][1])
         ]
 
         # Score
@@ -76,16 +86,28 @@ class Game:
                     enemy.draw()
 
                     # Bullet enemy kill
-                    for bullet in self.__bullets:
-                        if bullet.image.colliderect(enemy.image_rect):
-                            self.__enemies.remove(enemy)
-                            self.__score.add_score()
-                            pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
+                    try:
+                        for bullet in self.__bullets:
+                            if bullet.image.colliderect(enemy.image_rect):
+                                self.__enemies.remove(enemy)
+                                self.__bullets.remove(bullet)
+                                self.__score.add_score()
+
+                                enemy_coordinate = generate_enemies_coordinates(1)
+                                self.__enemies.append(Enemy(self.__screen,
+                                    enemy_coordinate[0][0], enemy_coordinate[0][1]))
+                                pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
+
+                    # If two bullets hit the enemy at once.
+                    except Exception:
+                        pass
 
                     # Player kill
                     if self.__gun.image_rect.colliderect(enemy.image_rect):
                         self.__play_mode = 'Game over'
                         pygame.mixer.Sound('sounds/loss.mp3').play()
+
+                    enemy.update()
 
                 self.__score.load_score()
 
@@ -107,3 +129,4 @@ class Game:
                         pygame.mixer.Sound('sounds/shooting.mp3').play()
 
             pygame.display.update()
+            self.__clock.tick(60)

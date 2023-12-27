@@ -13,7 +13,7 @@ class Bullet:
         self.__x = self.__gun.x + 35
         self.__y = self.__gun.y - 30
         self.__color = 5, 255, 5 # Bullet color (RGB)
-        self.__speed = 1
+        self.__speed = 5
         self.__image = pygame.draw.line(
             self.__screen, self.__color,
             (self.__x, self.__y), (self.__x, self.__y + 50), 2)
