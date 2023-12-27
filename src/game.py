@@ -4,6 +4,7 @@
 import pygame
 from objects import Gun, Bullet, Enemy
 from score import Score
+from game_over import GameOverScreen
 
 
 class Game:
@@ -84,8 +85,8 @@ class Game:
                         self.__score.load_score()
 
             elif self.__play_mode == 'Game over':
-                self.init()
-                self.__play_mode = 'Playing'
+                game_over_screen = GameOverScreen(self.__screen, self.__score)
+                self.__play_mode = game_over_screen.draw()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
