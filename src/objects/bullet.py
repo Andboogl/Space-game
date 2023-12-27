@@ -18,6 +18,11 @@ class Bullet:
             self.__screen, self.__color,
             (self.__x, self.__y), (self.__x, self.__y + 50), 2)
 
+    @property
+    def image(self):
+        """Get bullet image"""
+        return self.__image
+
     def update(self):
         """Update bullet coordinates"""
         self.__y -= self.__speed

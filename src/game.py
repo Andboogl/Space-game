@@ -2,7 +2,7 @@
 
 
 import pygame
-from objects import Gun, Bullet
+from objects import Gun, Bullet, Enemy
 
 
 class Game:
@@ -15,11 +15,21 @@ class Game:
         pygame.display.set_icon(pygame.image.load('images/icon.png'))
 
         # Player gun
-        self.gun = Gun(self.screen, 500, 500)
+        self.gun = Gun(self.screen, 1000, 700)
         self.gun_speed = 1
 
         # Bullets
         self.bullets = []
+
+        # Enemies
+        self.enemies = [
+            Enemy(self.screen, 50, 150),
+            Enemy(self.screen, 150, 250),
+            Enemy(self.screen, 250, 350),
+            Enemy(self.screen, 350, 450),
+            Enemy(self.screen, 450, 550),
+            Enemy(self.screen, 550, 660),
+        ]
 
     def main_loop(self):
         """Game mainloop"""
@@ -41,8 +51,16 @@ class Game:
             if keys[pygame.K_w]:
                 self.gun.minus_y_position(self.gun_speed)
 
-            for i in self.bullets:
-                i.update()
+            for bullet in self.bullets:
+                bullet.update()
+
+            for enemy in self.enemies:
+                enemy.draw()
+
+                for bullet in self.bullets:
+                    if bullet.image.colliderect(enemy.image_rect):
+                        self.enemies.remove(enemy)
+                        pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
