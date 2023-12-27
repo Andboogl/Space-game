@@ -53,6 +53,49 @@ class Game:
         # Score
         self.__score = Score()
 
+    def __draw_enemies(self):
+        """Draw enemies"""
+        # Drawing enemies
+        for enemy in self.__enemies:
+            enemy.draw()
+
+            # Bullet enemy kill
+            try:
+                for bullet in self.__bullets:
+                    if bullet.image.colliderect(enemy.image_rect):
+                        self.__enemies.remove(enemy)
+                        self.__bullets.remove(bullet)
+                        self.__score.add_score()
+
+                        enemy_coordinate = generate_enemies_coordinates(1)
+                        self.__enemies.append(Enemy(self.__screen,
+                            enemy_coordinate[0][0], enemy_coordinate[0][1]))
+                        pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
+
+            # If two bullets hit the enemy at once.
+            except Exception:
+                pass
+
+            # Player kill
+            if self.__gun.image_rect.colliderect(enemy.image_rect):
+                self.__play_mode = 'Game over'
+                pygame.mixer.Sound('sounds/loss.mp3').play()
+
+            # Lose when the enemy is at the bottom of the map
+            if enemy.image_rect.y >= 800 - enemy.image_rect.height:
+                self.__play_mode = 'Game over'
+                pygame.mixer.Sound('sounds/loss.mp3').play()
+
+            enemy.update()
+
+    def __draw_bullets(self):
+        """Draw bullets"""
+        for bullet in self.__bullets:
+            bullet.update()
+
+            if bullet.image.y <= 0 - bullet.image.height:
+                self.__bullets.remove(bullet)
+
     def main_loop(self) -> None:
         """Game mainloop"""
         while True:
@@ -74,40 +117,8 @@ class Game:
                 if keys[pygame.K_w]:
                     self.__gun.minus_y_position(self.__gun_speed)
 
-                # Drawing bullets
-                for bullet in self.__bullets:
-                    bullet.update()
-
-                    if bullet.image.y <= 0 - bullet.image.height:
-                        self.__bullets.remove(bullet)
-
-                # Drawing enemies
-                for enemy in self.__enemies:
-                    enemy.draw()
-
-                    # Bullet enemy kill
-                    try:
-                        for bullet in self.__bullets:
-                            if bullet.image.colliderect(enemy.image_rect):
-                                self.__enemies.remove(enemy)
-                                self.__bullets.remove(bullet)
-                                self.__score.add_score()
-
-                                enemy_coordinate = generate_enemies_coordinates(1)
-                                self.__enemies.append(Enemy(self.__screen,
-                                    enemy_coordinate[0][0], enemy_coordinate[0][1]))
-                                pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
-
-                    # If two bullets hit the enemy at once.
-                    except Exception:
-                        pass
-
-                    # Player kill
-                    if self.__gun.image_rect.colliderect(enemy.image_rect):
-                        self.__play_mode = 'Game over'
-                        pygame.mixer.Sound('sounds/loss.mp3').play()
-
-                    enemy.update()
+                self.__draw_bullets()
+                self.__draw_enemies()
 
                 self.__score.load_score()
 
