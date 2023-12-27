@@ -14,9 +14,16 @@ class Game:
         pygame.display.set_caption('Space game')
         pygame.display.set_icon(pygame.image.load('images/icon.png'))
 
+        self.init()
+
+    def init(self):
+        """Init game"""
         # Player gun
         self.gun = Gun(self.screen, 1000, 700)
         self.gun_speed = 1
+
+        # Playing atributes
+        self.is_alive = True
 
         # Bullets
         self.bullets = []
@@ -34,39 +41,51 @@ class Game:
     def main_loop(self):
         """Game mainloop"""
         while True:
-            self.screen.fill((0, 0, 0))
-            self.gun.draw()
+            if self.is_alive:
+                self.screen.fill((0, 0, 0))
+                self.gun.draw()
 
-            keys = pygame.key.get_pressed()
+                keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_a]:
-                self.gun.minus_x_position(self.gun_speed)
+                if keys[pygame.K_a]:
+                    self.gun.minus_x_position(self.gun_speed)
 
-            if keys[pygame.K_s]:
-                self.gun.plus_y_position(self.gun_speed)
+                if keys[pygame.K_s]:
+                    self.gun.plus_y_position(self.gun_speed)
 
-            if keys[pygame.K_d]:
-                self.gun.plus_x_position(self.gun_speed)
+                if keys[pygame.K_d]:
+                    self.gun.plus_x_position(self.gun_speed)
 
-            if keys[pygame.K_w]:
-                self.gun.minus_y_position(self.gun_speed)
+                if keys[pygame.K_w]:
+                    self.gun.minus_y_position(self.gun_speed)
 
-            for bullet in self.bullets:
-                bullet.update()
-
-            for enemy in self.enemies:
-                enemy.draw()
-
+                # Drawing bullets
                 for bullet in self.bullets:
-                    if bullet.image.colliderect(enemy.image_rect):
-                        self.enemies.remove(enemy)
-                        pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
+                    bullet.update()
+
+                # Drawing enemies
+                for enemy in self.enemies:
+                    enemy.draw()
+
+                    # Bullet enemy kill
+                    for bullet in self.bullets:
+                        if bullet.image.colliderect(enemy.image_rect):
+                            self.enemies.remove(enemy)
+                            pygame.mixer.Sound('sounds/enemy_kill.mp3').play()
+
+                    # Player kill
+                    if self.gun.image_rect.colliderect(enemy.image_rect):
+                        self.is_alive = False
+
+            else:
+                self.init()
+                self.is_alive = True
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quit(0)
 
-                elif event.type == pygame.KEYDOWN:
+                elif event.type == pygame.KEYDOWN and self.is_alive:
                     if event.key == pygame.K_SPACE:
                         bullet = Bullet(self.screen, self.gun)
                         self.bullets.append(bullet)

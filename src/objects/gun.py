@@ -16,7 +16,8 @@ class Gun:
             pygame.image.load('images/gun.png'),
             (width, height))
 
-        self.__image_rect = self.__image.get_rect()
+        self.__image_rect = self.__image.get_rect(
+            topleft=(self.__x, self.__y))
         self.__screen_rect = self.__screen.get_rect()
 
     @property
@@ -29,6 +30,11 @@ class Gun:
         """Get gun y position"""
         return self.__y
 
+    @property
+    def image_rect(self):
+        """Get gun image rect"""
+        return self.__image_rect
+
     def plus_x_position(self, pos):
         """
         Add number to x position
@@ -36,6 +42,9 @@ class Gun:
         """
         if self.__x + self.__image_rect.width < self.__screen_rect.width:
             self.__x += pos
+
+            self.__image_rect = self.__image.get_rect(
+                topleft=(self.__x, self.__y))
 
     def minus_x_position(self, pos):
         """
@@ -45,6 +54,9 @@ class Gun:
         if self.__x > 0:
             self.__x -= pos
 
+            self.__image_rect = self.__image.get_rect(
+                topleft=(self.__x, self.__y))
+
     def plus_y_position(self, pos):
         """
         Add number to y position
@@ -53,6 +65,9 @@ class Gun:
         if self.__y + self.__image_rect.height < self.__screen_rect.height:
             self.__y += pos
 
+            self.__image_rect = self.__image.get_rect(
+                topleft=(self.__x, self.__y))
+
     def minus_y_position(self, pos):
         """
         Minus number from y position
@@ -60,6 +75,9 @@ class Gun:
         """
         if self.__y > 0:
             self.__y -= pos
+
+            self.__image_rect = self.__image.get_rect(
+                topleft=(self.__x, self.__y))
 
     def draw(self) -> None:
         """Draw gun"""
