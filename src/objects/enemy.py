@@ -7,7 +7,7 @@ import pygame
 class Enemy:
     """Enemy"""
     def __init__(self, screen, x, y) -> None:
-        self.__enemy_speed = 2
+        self.__enemy_speed = 1
         self.__screen = screen
         self.__x = x
         self.__y = y

@@ -34,7 +34,7 @@ class Game:
 
         # Enemies
         enemies_coordinates = generate_enemies_coordinates(6)
-        print(enemies_coordinates)
+
         self.__enemies = [
             Enemy(self.__screen,
                   enemies_coordinates[0][0], enemies_coordinates[0][1]),

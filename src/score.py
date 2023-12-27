@@ -35,6 +35,12 @@ class Score:
             with open(self.__best_score_file, format_, encoding='utf-8') as file:
                 file.write(str(self.__score))
 
+            self.__best_score = int(self.__score)
+
+    def update(self):
+        """Update score data"""
+        self.__init__()
+
     def add_score(self, score=10) -> None:
         """Add score to score"""
         self.__score += score
