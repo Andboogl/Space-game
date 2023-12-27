@@ -85,6 +85,7 @@ class Game:
                     # Player kill
                     if self.__gun.image_rect.colliderect(enemy.image_rect):
                         self.__play_mode = 'Game over'
+                        pygame.mixer.Sound('sounds/loss.mp3').play()
 
                 self.__score.load_score()
 
