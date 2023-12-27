@@ -52,5 +52,6 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         bullet = Bullet(self.screen, self.gun)
                         self.bullets.append(bullet)
+                        pygame.mixer.Sound('sounds/shooting.mp3').play()
 
             pygame.display.update()
