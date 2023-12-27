@@ -18,6 +18,8 @@ class Game:
         pygame.display.set_caption('Space game')
         pygame.display.set_icon(pygame.image.load('images/icon.png'))
 
+        self.__points_font = pygame.font.Font('fonts/RubikScribble.ttf', 50)
+
         self.init()
 
     def init(self) -> None:
@@ -121,6 +123,10 @@ class Game:
                 self.__draw_enemies()
 
                 self.__score.load_score()
+
+                # Drawing score text
+                score_text = self.__points_font.render(str(self.__score.score), True, (255, 255, 255))
+                self.__screen.blit(score_text, (1200 / 2 - score_text.get_width(), 10))
 
             elif self.__play_mode == 'Game over':
                 game_over_screen = GameOverScreen(self.__screen, self.__score)
