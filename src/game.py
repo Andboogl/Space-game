@@ -68,6 +68,9 @@ class Game:
                 for bullet in self.__bullets:
                     bullet.update()
 
+                    if bullet.image.y <= 0 - bullet.image.height:
+                        self.__bullets.remove(bullet)
+
                 # Drawing enemies
                 for enemy in self.__enemies:
                     enemy.draw()
