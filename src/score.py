@@ -6,7 +6,7 @@ import os
 
 class Score:
     """Class to work with player score"""
-    def __init__(self):
+    def __init__(self) -> None:
         self.__score = 0
         self.__best_score_file = 'best_score.txt'
 
@@ -17,7 +17,7 @@ class Score:
         except Exception:
             self.__best_score = None
 
-    def load_score(self):
+    def load_score(self) -> None:
         """Load score to score file"""
         if not self.__best_score:
             to_write = True
@@ -35,16 +35,16 @@ class Score:
             with open(self.__best_score_file, format_, encoding='utf-8') as file:
                 file.write(str(self.__score))
 
-    def add_score(self, score=10):
+    def add_score(self, score=10) -> None:
         """Add score to score"""
         self.__score += score
 
     @property
-    def score(self):
+    def score(self) -> int:
         """Get best score"""
         return self.__score
 
     @property
-    def best_score(self):
+    def best_score(self) -> int:
         """Get best score"""
         return self.__best_score

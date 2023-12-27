@@ -4,7 +4,7 @@
 from game import Game
 
 
-def main():
+def main() -> None:
     """Runs game"""
     game = Game()
     game.main_loop()
