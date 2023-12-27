@@ -82,11 +82,15 @@ class Game:
                     # Player kill
                     if self.__gun.image_rect.colliderect(enemy.image_rect):
                         self.__play_mode = 'Game over'
-                        self.__score.load_score()
+
+                self.__score.load_score()
 
             elif self.__play_mode == 'Game over':
                 game_over_screen = GameOverScreen(self.__screen, self.__score)
                 self.__play_mode = game_over_screen.draw()
+
+                if self.__play_mode == 'Playing':
+                    self.init()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

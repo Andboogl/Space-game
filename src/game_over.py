@@ -39,4 +39,15 @@ class GameOverScreen:
         self.__screen.blit(best_score_text, (
             self.__screen_rect.width / 2 - best_score_text.get_width() / 2, 297))
 
+        # Play again text
+        play_again_text = self.__option_font.render(
+            'Play again',
+            True, self.__text_color)
+        play_again_text_rect = play_again_text.get_rect(topleft=(452, 630))
+        self.__screen.blit(play_again_text, (452, 630))
+
+        if play_again_text_rect.collidepoint(pygame.mouse.get_pos()):
+            if pygame.mouse.get_pressed()[0]:
+                return 'Playing'
+
         return 'Game over' # Returns play mode
