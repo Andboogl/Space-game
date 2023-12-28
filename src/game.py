@@ -19,6 +19,7 @@ class Game:
         pygame.display.set_icon(pygame.image.load('images/icon.png'))
 
         self.__points_font = pygame.font.Font('fonts/RubikScribble.ttf', 50)
+        self.__play_mode = 'Playing'
 
         self.init()
 
@@ -125,7 +126,8 @@ class Game:
                 self.__score.load_score()
 
                 # Drawing score text
-                score_text = self.__points_font.render(str(self.__score.score), True, (255, 255, 255))
+                score_text = self.__points_font.render(
+                    str(self.__score.score), True, (255, 255, 255))
                 self.__screen.blit(score_text, (1200 / 2 - score_text.get_width(), 10))
 
             elif self.__play_mode == 'Game over':
